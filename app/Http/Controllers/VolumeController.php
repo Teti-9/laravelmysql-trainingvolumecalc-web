@@ -122,15 +122,6 @@ class VolumeController extends Controller
         return response()->json(['message' => $response], 200);
     }
 
-    public function show()
-    {
-        $user = auth('sanctum')->user();
-
-        $search = Volume::where('user_id', $user->id)->get();
-
-        return response()->json($search);
-    }
-
     public function store(Request $request)
     {
 

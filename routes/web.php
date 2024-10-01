@@ -5,7 +5,6 @@ use App\Http\Controllers\VolumeController;
 
 Route::get('/', [VolumeController::class, 'index']);
 Route::get('/usuario', [VolumeController::class, 'getCurrentUser'])->middleware('auth');
-Route::get('/search', [VolumeController::class, 'show'])->middleware('auth');
 Route::get('/allvolume', [VolumeController::class, 'calculateAllVolume'])->middleware('auth');
 Route::get('/onevolume/{musculo}', [VolumeController::class, 'calculateOneVolume'])->middleware('auth');
 Route::post('/create', [VolumeController::class, 'store'])->middleware('auth');
