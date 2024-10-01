@@ -17,6 +17,13 @@ Execute o comando php artisan migrate:fresh para rodar as migrations.
 Rode a aplicação na pasta raíz do projeto:
 php artisan serve
 ```
+```
+Principais pastas para o backend:
+routes/web.php
+app/Http/VolumeController.php
+app/Providers/AuthServiceProvider.php
+app/Models/Volume.php
+```
 
 ### Endpoints
 ![image](https://github.com/user-attachments/assets/e0edbbb5-8bf2-4ef8-97a3-861d4ea8c5d9)
