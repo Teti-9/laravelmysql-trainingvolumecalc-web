@@ -1,0 +1,49 @@
+networks:
+  backend_network:
+    name: training_volume_calc
+
+services:
+  php-apache:
+    image: webdevops/php-apache-dev:8.3-alpine
+    container_name: api-training_volume_calc
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/app
+    environment:
+      WEB_DOCUMENT_ROOT: /app/public
+    depends_on:
+      - postgresqldb
+    networks:
+      backend_network:
+        aliases:
+          - api-training_volume_calc
+
+  postgresqldb:
+    image: postgres:${POSTGRESQL_VERSION}
+    container_name: postgresqldb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql/scripts:/docker-entrypoint-initdb.d/
+      - ./postgresql/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    networks:
+      backend_network:
+        aliases:
+          - postgresql
+
+  portainer-api-training_volume_calc:
+    image: portainer/portainer
+    container_name: portainer-api-training_volume_calc
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    ports:
+      - 9000:9000
+      - 8000:8000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data:/data
