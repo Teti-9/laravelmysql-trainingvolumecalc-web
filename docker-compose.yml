@@ -13,28 +13,28 @@ services:
       - ./:/app
     environment:
       WEB_DOCUMENT_ROOT: /app/public
-    # depends_on:
-    #   - postgresqldb
+    depends_on:
+      - postgresqldb
     networks:
       backend_network:
         aliases:
           - api-training_volume_calc
 
-  # postgresqldb:
-  #   image: postgres:${POSTGRESQL_VERSION}
-  #   container_name: postgresql-api-training_volume_calc
-  #   restart: always
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - ./postgresql/scripts:/docker-entrypoint-initdb.d/
-  #     - ./postgresql/data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
-  #   networks:
-  #     backend_network:
-  #       aliases:
-  #         - postgresql
+  postgresqldb:
+    image: postgres:${POSTGRESQL_VERSION}
+    container_name: postgresqldb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql/scripts:/docker-entrypoint-initdb.d/
+      - ./postgresql/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRESQL_PASS}
+    networks:
+      backend_network:
+        aliases:
+          - postgresql
 
   portainer-api-training_volume_calc:
     image: portainer/portainer
