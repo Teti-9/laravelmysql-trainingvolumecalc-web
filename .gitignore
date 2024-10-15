@@ -19,5 +19,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.zed
-/postgresql
+/postgresql/data
 /portainer_data
