@@ -135,6 +135,12 @@ class VolumeController extends Controller
     public function update(Request $request, $id)
     {
 
+        $user = auth('sanctum')->user();
+
+        if (is_null($user)) {
+            return response()->json(['message' => 'Não autenticado.'], 401);
+        }
+
         $novo_exercicio = $request->all();
 
         $search = Volume::where('id', $id)->first();
@@ -150,6 +156,12 @@ class VolumeController extends Controller
 
     public function destroy($id)
     {
+
+        $user = auth('sanctum')->user();
+
+        if (is_null($user)) {
+            return response()->json(['message' => 'Não autenticado.'], 401);
+        }
 
         $search = Volume::where('id', $id)->first();
 
