@@ -46,3 +46,4 @@ app/Http/Controllers/AuthController.php
 ```
 
 ### Endpoints
+![image](https://github.com/user-attachments/assets/75c247ba-c44f-4608-8224-29f67b228afa)
