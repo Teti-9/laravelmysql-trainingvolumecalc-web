@@ -12,8 +12,9 @@ class VolumeController extends Controller
 
     public function calculateAllVolume()
     {
+        $user = auth('sanctum')->user();
 
-        $search = Volume::all();
+        $search = Volume::where('user_id', $user->id)->get();
 
         if ($search->isEmpty()) {
             return response()->json(['message' => 'Nenhum volume encontrado, adicione exercícios para calcular.'], 404);
@@ -68,7 +69,11 @@ class VolumeController extends Controller
     public function calculateOneVolume($musculo)
     {
 
-        $search = Volume::where('musculo', $musculo)->get();
+        $user = auth('sanctum')->user();
+
+        $search = Volume::where('musculo', $musculo)
+            ->where('user_id', $user->id)
+            ->get();
 
         if ($search->isEmpty()) {
             return response()->json(['message' => 'Nenhum volume encontrado, adicione exercícios para calcular.'], 404);
@@ -105,6 +110,7 @@ class VolumeController extends Controller
 
     public function store(Request $request)
     {
+        $user = auth('sanctum')->user();
 
         $volume = new Volume;
 
@@ -113,7 +119,7 @@ class VolumeController extends Controller
         $volume->residual = ucwords(strtolower($request->residual));
         $volume->series = $request->series;
         $volume->data = now();
-        $volume->user_id = 1;
+        $volume->user_id = $user->id;
 
         $muscleCorrections = [
             'Biceps' => 'Bíceps',
@@ -143,7 +149,9 @@ class VolumeController extends Controller
 
         $novo_exercicio = $request->all();
 
-        $search = Volume::where('id', $id)->first();
+        $search = Volume::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
 
         if (is_null($search)) {
             return response()->json(['message' => 'ID não encontrado.'], 404);
@@ -163,7 +171,9 @@ class VolumeController extends Controller
             return response()->json(['message' => 'Não autenticado.'], 401);
         }
 
-        $search = Volume::where('id', $id)->first();
+        $search = Volume::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
 
         if (is_null($search)) {
             return response()->json(['message' => 'ID não encontrado.'], 404);
