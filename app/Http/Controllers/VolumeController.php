@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Gate;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Volume;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class VolumeController extends Controller
 {
@@ -112,6 +111,17 @@ class VolumeController extends Controller
     {
         $user = auth('sanctum')->user();
 
+        try {
+            $request->validate([
+                'exercicio' => 'required|string|max:255',
+                'musculo' => 'required|string|max:255',
+                'residual' => 'nullable|string|max:255',
+                'series' => 'required|integer|min:1',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Requisição inválida!'], 404);
+        }
+
         $volume = new Volume;
 
         $volume->exercicio = ucwords(strtolower($request->exercicio));
@@ -145,6 +155,17 @@ class VolumeController extends Controller
 
         if (is_null($user)) {
             return response()->json(['message' => 'Não autenticado.'], 401);
+        }
+
+        try {
+            $request->validate([
+                'exercicio' => 'nullable|string|max:255',
+                'musculo' => 'nullable|string|max:255',
+                'residual' => 'nullable|string|max:255',
+                'series' => 'nullable|integer|min:1',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Requisição inválida!'], 404);
         }
 
         $novo_exercicio = $request->all();
