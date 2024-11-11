@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
+use MongoDB\Driver\Exception\BulkWriteException;
 
 class AuthController extends Controller
 {
@@ -23,6 +24,11 @@ class AuthController extends Controller
                 'email' => $email,
                 'password' => bcrypt($password),
             ]);
+        } catch (BulkWriteException $e) {
+            if ($e->getCode() === 11000) {
+                return response()->json(['error' => 'Esse email já foi registrado.'], 409);
+            }
+            return response()->json(['error' => 'MongoDB error occurred.'], 500);
         } catch (QueryException $e) {
             if ($e->getCode() === '23000') {
                 return response()->json(['error' => 'Esse email ja foi registrado.'], 409);

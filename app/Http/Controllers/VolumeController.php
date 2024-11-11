@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use MongoDB\BSON\ObjectId;
+
 use App\Models\Volume;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+
 
 class VolumeController extends Controller
 {
@@ -70,7 +73,7 @@ class VolumeController extends Controller
 
         $user = auth('sanctum')->user();
 
-        $search = Volume::where('musculo', $musculo)
+        $search = Volume::where('musculo', ucwords(strtolower($musculo)))
             ->where('user_id', $user->id)
             ->get();
 
@@ -170,7 +173,8 @@ class VolumeController extends Controller
 
         $novo_exercicio = $request->all();
 
-        $search = Volume::where('id', $id)
+        // $search = Volume::where('id', $id)
+        $search = Volume::where('_id', new ObjectId($id))
             ->where('user_id', $user->id)
             ->first();
 
@@ -192,7 +196,8 @@ class VolumeController extends Controller
             return response()->json(['message' => 'Não autenticado.'], 401);
         }
 
-        $search = Volume::where('id', $id)
+        // $search = Volume::where('id', $id)
+        $search = Volume::where('_id', new ObjectId($id))
             ->where('user_id', $user->id)
             ->first();
 
